@@ -1,0 +1,1 @@
+{"jsonrpc":"2.0","method":"host.update","params":{"hostid":"$hostid","groups":["$groupid"]},"id":1}
