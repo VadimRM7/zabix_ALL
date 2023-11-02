@@ -4,7 +4,7 @@ groupname="25"
 agent_ip="$(hostname -I | awk '{print $1}')"
 server_ip="65.108.196.236"
 version="6.4"
-zabbix_server_url="http://65.108.196.236:8080/zabbix/api_jsonrpc.php"
+zabbix_server_url="http://65.108.196.236:8080/api_jsonrpc.php"
 api_user="api_user"
 api_user_pass="y0#rZjb.RnQgsLw"
 
