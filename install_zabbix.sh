@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 hostname="$HOST_NAME"
 groupname="25"
-agent_ip="$(hostname -I | awk '{print $1}')"
+agent_ip="$(curl -s ifconfig.me)"
 server_ip="65.108.196.236"
 version="6.4"
 zabbix_server_url="http://65.108.196.236:8080/api_jsonrpc.php"
