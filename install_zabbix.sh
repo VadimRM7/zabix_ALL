@@ -9,8 +9,8 @@ if [[ -z "$hostname" ]]; then
 fi
 
 run_command() {
-    echo "Выполнение команды: $@"
-    "$@"
+    echo "Выполнение команды: sudo $@"
+    sudo "$@"
     local status=$?
     if [ $status -ne 0 ]; then
         echo "Ошибка при выполнении команды: $1"
