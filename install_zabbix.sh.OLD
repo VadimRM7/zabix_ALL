@@ -5,7 +5,7 @@ server_ip="65.108.196.236"
 
 if [[ -z "$hostname" ]]; then
     echo "Переменная окружения HOST_NAME не установлена"
-    exit 1
+    error_occurred=1
 fi
 
 error_occurred=0
@@ -67,8 +67,8 @@ config_zabbix
 
 if [ $error_occurred -ne 0 ]; then
     echo "Скрипт завершен с ошибками."
-    exit 1
 else
     echo "Скрипт успешно выполнен."
-    exit 0
 fi
+
+# Уберите команду exit, чтобы избежать закрытия терминала
