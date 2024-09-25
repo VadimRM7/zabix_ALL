@@ -8,47 +8,39 @@ if [[ -z "$hostname" ]]; then
     exit 1
 fi
 
+# Функция для выполнения команд с проверкой на ошибки
 run_command() {
     echo "Выполнение команды: sudo $@"
     sudo "$@"
-    local status=$?
-    if [ $status -ne 0 ]; then
+    if [ $? -ne 0 ]; then
         echo "Ошибка при выполнении команды: $@"
-        return $status
+    else
+        echo "Команда успешно выполнена: $@"
     fi
-    echo "Команда успешно выполнена: $@"
 }
 
-remove_old_zabbix() {
-    echo "Удаление старого агента Zabbix"
-    run_command systemctl stop zabbix-agent
-    run_command apt remove -y zabbix-agent
-    run_command rm -rf /etc/zabbix/
-}
+# Удаление старого агента Zabbix
+echo "Удаление старого агента Zabbix"
+run_command systemctl stop zabbix-agent
+run_command apt remove -y zabbix-agent
+run_command rm -rf /etc/zabbix/
 
-install_zabbix() {
-    echo "Установка нового агента Zabbix"
-    wget https://repo.zabbix.com/zabbix/6.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.4-1+ubuntu22.04_all.deb
-    run_command dpkg -i zabbix-release_6.4-1+ubuntu22.04_all.deb
-    run_command apt-get update
-    run_command apt-get install -y zabbix-agent
-    run_command systemctl enable zabbix-agent
-    rm -f zabbix-release_6.4-1+ubuntu22.04_all.deb
-}
+# Установка нового агента Zabbix
+echo "Установка нового агента Zabbix"
+wget https://repo.zabbix.com/zabbix/6.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.4-1+ubuntu22.04_all.deb
+run_command dpkg -i zabbix-release_6.4-1+ubuntu22.04_all.deb
+run_command apt-get update
+run_command apt-get install -y zabbix-agent
+run_command systemctl enable zabbix-agent
+rm -f zabbix-release_6.4-1+ubuntu22.04_all.deb
 
-config_zabbix() {
-    echo "Конфигурация агента Zabbix"
-    sed -i "s/Hostname=.*/Hostname=$hostname/g" /etc/zabbix/zabbix_agentd.conf
-    sed -i "s/Server=.*/Server=$server_ip/g" /etc/zabbix/zabbix_agentd.conf
-    sed -i "s/ServerActive=.*/ServerActive=$server_ip/g" /etc/zabbix/zabbix_agentd.conf
-    sed -i "s/# HostMetadata=/HostMetadata=autoreg.linux/" /etc/zabbix/zabbix_agentd.conf
-    run_command systemctl restart zabbix-agent
-    echo "Агент Zabbix сконфигурирован и запущен"
-}
+# Конфигурация агента Zabbix
+echo "Конфигурация агента Zabbix"
+sed -i "s/Hostname=.*/Hostname=$hostname/g" /etc/zabbix/zabbix_agentd.conf
+sed -i "s/Server=.*/Server=$server_ip/g" /etc/zabbix/zabbix_agentd.conf
+sed -i "s/ServerActive=.*/ServerActive=$server_ip/g" /etc/zabbix/zabbix_agentd.conf
+sed -i "s/# HostMetadata=/HostMetadata=autoreg.linux/" /etc/zabbix/zabbix_agentd.conf
+run_command systemctl restart zabbix-agent
 
-echo "Запуск скрипта"
-remove_old_zabbix
-install_zabbix
-config_zabbix
-
+echo "Агент Zabbix сконфигурирован и запущен"
 echo "Скрипт выполнен."
