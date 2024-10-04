@@ -40,7 +40,7 @@ install_zabbix(){
         run_command wget https://repo.zabbix.com/zabbix/6.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.4-1+ubuntu22.04_all.deb
         run_command dpkg -i "zabbix-release_6.4-1+ubuntu22.04_all.deb"
         run_command apt-get update
-        run_command apt-get install -y zabbix-agent
+        run_command DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a apt-get install -y zabbix-agent
         run_command systemctl restart zabbix-agent
         run_command systemctl enable zabbix-agent
         run_command rm -f "zabbix-release_6.4-1+ubuntu22.04_all.deb"
